@@ -5,10 +5,9 @@ import models.{CustomerDTO, ErrorMessage, FormSampleDTO}
 import play.api._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Request, Action, Controller}
-
-//for slick DBSession
 import play.api.db.slick._
 import play.api.Play.current
+import util.S3Uploader
 
 object Sample extends Controller {
 
@@ -41,11 +40,12 @@ object Sample extends Controller {
   }
 
   def upload = Action(parse.multipartFormData) { request =>
-    request.body.file("file").map { picture =>
+    request.body.file("file").map { postedFile =>
       import java.io.File
-      val filename = picture.filename
-      val contentType = picture.contentType
-      picture.ref.moveTo(new File("tmp/" + filename))
+      val filename = postedFile.filename
+      val contentType = postedFile.contentType
+      postedFile.ref.moveTo(new File("tmp/" + filename))
+      S3Uploader.put(new File("tmp/" + filename))
       Ok(filename + contentType)
     }.getOrElse {
       Ok("miss")
@@ -65,6 +65,7 @@ object Sample extends Controller {
       Json.toJson(result)
   }
 
+  //this method provide slick-Session
   def preLogic(func:Session => JsValue):JsValue = DB.withSession {session=>
     try{
       func(session)
