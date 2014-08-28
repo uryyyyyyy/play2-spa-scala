@@ -1,0 +1,33 @@
+{
+  "node": true,
+  "browser": true,
+  "esnext": true,
+  "bitwise": true,
+  "camelcase": true,
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
+  "indent": 2,
+  "latedef": true,
+  "newcap": true,
+  "nonew": false,
+  "noarg": true,
+  "quotmark": "single",
+  "undef": true,
+  "unused": false,
+  "strict": true,
+  "trailing": true,
+  "smarttabs": true,
+  "globals": {
+    "$": false,
+    "jQuery": false,
+    "simpleWebDevTool": false,
+    "_": false,
+    "controller": false,
+    "tinymce": false,
+    "Vue": false,
+    "Slick":false,
+    "Bacon":false
+  }
+}
+

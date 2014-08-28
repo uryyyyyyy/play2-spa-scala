@@ -1,0 +1,7 @@
+{
+  option_name: true,
+  another_option_name: false,
+  predef : [
+    'simpleWebDevTool'
+  ]
+}

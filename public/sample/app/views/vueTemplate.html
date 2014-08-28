@@ -1,0 +1,23 @@
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 column">
+            <input id="sampleForm" type="text" v-model="form_" class="form-control" placeholder="Search" />
+            <p><a id="addButton" class="btn btn-primary" role="button">add</a>
+                <a id="searchButton" class="btn btn-default" role="button">search</a>
+                <a id="addElemButton" class="btn btn-default" role="button">addElem</a></p>
+
+            <ul>
+                <li v-repeat="list">{{$value}}</li>
+            </ul>
+        </div>
+        <div class="col-md-6 column">
+            <h1 id="editable_title">Editable header</h1>
+
+            <div id="editable" style="width:100%; height:250px">
+                This is an editable div element element.
+            </div>
+                <textarea id="text1" v-model="text">{{$value}}</textarea>
+        </div>
+    </div>
+</div>

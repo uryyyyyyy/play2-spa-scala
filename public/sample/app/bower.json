@@ -1,0 +1,24 @@
+{
+  "name": "simpleWebDevTool",
+  "version": "0.0.0",
+  "homepage": "https://github.com/uryyyyyyy/simpleWebDevTool",
+  "authors": [
+    "shibatako <koki305@gmail.com>"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "bootstrap": "~3.2.0",
+    "lodash": "~2.4.1",
+    "sammy": "~0.7.5",
+    "tinymce": "~4.1.1",
+    "vue": "~0.10.5",
+    "jstree": "~3.0.2",
+    "slickgrid": "~2.1.0",
+    "jquery-ui": "~1.11.0",
+    "jquery.event.drag-drop": "~2.2.1",
+    "select2": "~3.5.0",
+    "portamento": "*",
+    "bacon": "~0.7.18",
+    "mergely": "~3.3.6"
+  }
+}

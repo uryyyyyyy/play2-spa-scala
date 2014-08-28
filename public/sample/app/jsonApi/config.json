@@ -1,0 +1,19 @@
+{
+    "simulated-lag": 1000,
+    "cors": false,
+    "jsonp": false,
+    "proxy": {
+        "server": "localhost:9000",
+        "default": false,
+        "calls": {
+
+        }
+    },
+    "variables": {
+        "server": "localhost:9000"
+    },
+    "routes": [
+        "/path/:id",
+        "/jstree/:id"
+    ]
+}

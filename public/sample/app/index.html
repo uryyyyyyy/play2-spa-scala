@@ -1,0 +1,69 @@
+<!doctype html>
+<html id="SimpleWebDevTool">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- endbower -->
+
+    <!-- build:css styles.min.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+    <!-- other CSS -->
+    <!-- other end -->
+</head>
+<body>
+
+<!-- Add your site or application content here -->
+<div id="main" class="container">
+    <div class="header">
+        <ul class="nav nav-pills pull-right">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#/top">top</a></li>
+        </ul>
+        <h3 class="text-muted"><i class="icon-camera-retro icon-large brown"></i><span class="glyphicon glyphicon-tower"
+                                                                                       style="color: red;"></span>simpleWebDevTool
+        </h3>
+        <i class="fa fa-floppy-o brown text-warning"></i> 
+        <span class="fa-stack fa-lg">
+  <i class="fa fa-camera fa-stack-1x"></i>
+  <i class="fa fa-ban fa-stack-2x text-danger"></i>
+</span>
+    </div>
+    <div id="alert"></div>
+
+    <div id="template"></div>
+
+    <div class="footer">
+        <p><span class="glyphicon glyphicon-tower"></span> from uryyyyyyy </p>
+    </div>
+</div>
+
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/lodash/dist/lodash.min.js"></script>
+<script src="bower_components/bacon/dist/Bacon.min.js"></script>
+<script src="bower_components/sammy/lib/min/sammy-0.7.5.min.js"></script>
+<!-- endbower -->
+
+<!-- other library -->
+
+<!-- library end -->
+
+<!-- build:js scripts.min.js -->
+<script src="scripts/appRoute.js"></script>
+<script src="scripts/controller/topPageController.js"></script>
+<script src="scripts/service/topPageService.js"></script>
+<script src="scripts/dao/topPageDao.js"></script>
+<script src="scripts/util/ajaxUtil.js"></script>
+<script src="scripts/util/render.js"></script>
+<script src="scripts/util/timer.js"></script>
+<script src="scripts/component/sampleForm.js"></script>
+<script src="scripts/component/sampleButton.js"></script>
+<!-- endbuild -->
+</body>
+</html>
