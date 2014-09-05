@@ -1,22 +1,21 @@
 package controllers
 
-import daos.{UserDao, CustomerDao, FormSampleDao}
-import models.{PRMUser, CustomerDTO, ErrorMessage, FormSampleDTO}
+import daos.UserDao
+import models._
 import play.api._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Request, Action, Controller}
 import play.api.db.slick._
 import play.api.Play.current
 import util.S3Uploader
+import play.api.cache.Cache
 
 import scala.slick.jdbc.JdbcBackend
 
 object ConfigController extends Controller {
 
-
-  private def miniLogic():Session => JsValue = { implicit session: Session =>
-    val result = FormSampleDTO(1, "success")
-    Json.toJson(result)
+  def createSessionId:String = {
+    "randomString"
   }
 
   def config = Action {request =>
@@ -25,8 +24,10 @@ object ConfigController extends Controller {
     val user = Json.fromJson[PRMUser](jsValue).get
 
     if(checkUser(user)){
+      val sessionId = createSessionId
+      Cache.set(sessionId, user)
       Ok("OK").withSession(
-        "connected" -> user.name)
+        "sessinId" -> sessionId)
     }else{
       Ok(Json.toJson(ErrorMessage("error")))
     }
@@ -37,9 +38,9 @@ object ConfigController extends Controller {
   }
 
   def lookSession = Action { request =>
-    create(PRMUser("admin", "gegege"))
-    request.session.get("connected").map { user =>
-      Ok("Hello " + user)
+    request.session.get("sessinId").map { sessionId =>
+      val user = Cache.getAs[PRMUser](sessionId).get
+      Ok(Json.toJson(SessionDTO(user.name, sessionId)))
     }.getOrElse {
       Unauthorized("Oops, you are not connected")
     }

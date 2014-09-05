@@ -6,6 +6,7 @@ simpleWebDevTool.controller.configController = function(){
     //var addButton = component.sampleButton('#addButton');
     var nameForm = component.form('#userForm');
     var passForm = component.form('#passForm');
+    var sessionForm = component.form('#sessionForm');
 
     nameForm.keyUpEStream.assign(function(e) {
         console.log('miniForm.keyUpEStream');
@@ -16,9 +17,16 @@ simpleWebDevTool.controller.configController = function(){
         }
     });
 
+    var _refreshAll = function(refreshData) {
+        console.log('refreshAll');
+        sessionForm.refresh('name:' + refreshData.sessionData.name +
+            ' sessionId:' + refreshData.sessionData.sessionId);
+    };
+
     return {
         load : function(){
             console.log('load');
+            service.load().assign(_refreshAll);
         }
     };
 };

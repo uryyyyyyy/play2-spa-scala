@@ -13,6 +13,13 @@
 
             //when post was error(internal server error)
             bacon.onError(util.errorDialog);
-        }
+        },
+
+        load : function () {
+            console.log('service.configService.load');
+            return Bacon.combineTemplate({
+                sessionData: dao.configDao.getSession()
+            });
+        },
     };
 })(jQuery);

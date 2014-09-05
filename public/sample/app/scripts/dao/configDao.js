@@ -13,6 +13,11 @@
             return Bacon.fromPromise(
                 util.postAjaxAsync('jsonApi/config', JSON.stringify(reqData))
             );
-        }
+        },
+
+        getSession: function () {
+            console.log('dao.mainDao.load');
+            return Bacon.fromPromise(util.getAjaxAsync('jsonApi/config'));
+        },
     };
 })(jQuery);
