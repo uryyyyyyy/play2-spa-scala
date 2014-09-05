@@ -9,7 +9,7 @@ import play.api.db.slick._
 import play.api.Play.current
 import util.{SessionUtil, S3Uploader}
 
-object Sample extends Controller {
+object SampleController extends Controller {
 
   def getTopSample(id: Long) = Action {
     Ok(Json.toJson(miniLogic()))
@@ -21,7 +21,7 @@ object Sample extends Controller {
 
   def putTopSample(id: Long) = Action {request =>
     require(id >= 0)
-    SessionUtil.isCorrectReq(request)
+    SessionUtil.checkSession(request)
     val formDto = FormSampleDTO.fromJson(request.body.asJson)
     val formSample = logic1(formDto)
     Ok(Json.toJson(formSample))
