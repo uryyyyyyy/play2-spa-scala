@@ -28,6 +28,12 @@ jQuery(function() {
             simpleWebDevTool.controller.topPageController().load();
         });
 
+        app.get('#/config', function(context) {
+            console.log('access to #/config');
+            $('#template').html(_.template(simpleWebDevTool.util.render('configTemplate')));
+            simpleWebDevTool.controller.configController().load();
+        });
+
     });
     app.run();
 });

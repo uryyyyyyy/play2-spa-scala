@@ -16,7 +16,6 @@ object S3Uploader extends App {
   def put(localFile:File) = {
     val credentials = new BasicAWSCredentials(accessKey,secretKey)
     val s3Client = new AmazonS3Client(credentials)
-    val localFilePath = "ローカルのファイルパス"
     val s3BucketName = "バケット名"
     val s3FilePath = "S3のアップロード先のパス"
     val upReq = new PutObjectRequest(s3BucketName, s3FilePath, localFile)
