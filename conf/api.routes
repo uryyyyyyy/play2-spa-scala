@@ -1,4 +1,8 @@
 
+POST    /config                                                         controllers.ConfigController.config
+GET    /config                                                         controllers.ConfigController.lookSession
+
+
 GET    /topSample/:id                                                         controllers.Sample.getTopSample(id: Long)
 POST    /topSample/:id                                                         controllers.Sample.putTopSample(id: Long)
 
