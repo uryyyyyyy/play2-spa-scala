@@ -1,6 +1,6 @@
 package controllers
 
-import daos.{CustomerDao, FormSampleDao}
+import daos.{UserDao, CustomerDao, FormSampleDao}
 import models.{PRMUser, CustomerDTO, ErrorMessage, FormSampleDTO}
 import play.api._
 import play.api.libs.json.{JsValue, Json}
@@ -8,6 +8,8 @@ import play.api.mvc.{Request, Action, Controller}
 import play.api.db.slick._
 import play.api.Play.current
 import util.S3Uploader
+
+import scala.slick.jdbc.JdbcBackend
 
 object ConfigController extends Controller {
 
@@ -21,15 +23,21 @@ object ConfigController extends Controller {
     require(isCorrectReq(request))
     val jsValue = request.body.asJson.get
     val user = Json.fromJson[PRMUser](jsValue).get
-    if(true){
+
+    if(checkUser(user)){
       Ok("OK").withSession(
         "connected" -> user.name)
     }else{
-      Ok(preLogic(logic1(user)))
+      Ok(Json.toJson(ErrorMessage("error")))
     }
   }
 
+  def create(user: PRMUser) = DB.withSession {implicit session =>
+    UserDao.create(user)
+  }
+
   def lookSession = Action { request =>
+    create(PRMUser("admin", "gegege"))
     request.session.get("connected").map { user =>
       Ok("Hello " + user)
     }.getOrElse {
@@ -37,31 +45,15 @@ object ConfigController extends Controller {
     }
   }
 
-  private def logic1(user: PRMUser):Session => JsValue = { session: Session =>
-
-    //configuration check
-
-    Json.toJson(user)
+  def encript(s: String): String = {
+    s + "aaa"
   }
 
-  private def logic2(id:Long):Session => JsValue = {implicit session =>
-      CustomerDao.create(CustomerDTO(-1, "name"))
-      CustomerDao.update(CustomerDTO(1, "update"))
-      val customer = CustomerDao.searchByID(id).get
-      val result = CustomerDTO(customer.id, customer.name)
-      Json.toJson(result)
-  }
-
-  //this method provide slick-Session
-  def preLogic(func:Session => JsValue):JsValue = DB.withSession {session=>
-    try{
-      func(session)
-    } catch {
-      // exception like this...
-      //case e: TransactionException => Left("your post data is old")
-      //case e: JdbcSQLException => Left(ErrorMessage("your sql is not good"))//transaction?
-      //case e: JsResultException => Json.toJson(ErrorMessage("Bad request"))
-      case e: Exception => Json.toJson(ErrorMessage("Internal server error"))
+  private def checkUser(user: PRMUser):Boolean = DB.withSession {implicit session =>
+    UserDao.create(PRMUser("admin", "admin"))
+    UserDao.getByName(user.name) match{
+      case None => false
+      case Some(u) => u.pass == encript(user.pass)
     }
   }
 
