@@ -8,8 +8,11 @@ object FormSampleDao {
   lazy val query = FormSampleTable.query
 
   def getById(id: Long)(implicit s: Session): Option[FormSampleDTO] = {
-    val entity = query.filter(_.id === id).firstOption.get
-    Option(FormSampleDTO(entity.id, entity.formStr))
+    val opt = query.filter(_.id === id).firstOption
+    opt match {
+      case None => None
+      case Some(u) => Option(FormSampleDTO(u.id, u.formStr))
+    }
   }
 
   def create(form: FormSampleDTO)(implicit s: Session) = {

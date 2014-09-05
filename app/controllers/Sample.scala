@@ -1,42 +1,40 @@
 package controllers
 
 import daos.{CustomerDao, FormSampleDao}
-import models.{CustomerDTO, ErrorMessage, FormSampleDTO}
+import models.{CustomerDTO, FormSampleDTO}
 import play.api._
-import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Request, Action, Controller}
+import play.api.libs.json.Json
+import play.api.mvc.{Action, Controller}
 import play.api.db.slick._
 import play.api.Play.current
-import util.S3Uploader
+import util.{SessionUtil, S3Uploader}
 
 object Sample extends Controller {
 
   def getTopSample(id: Long) = Action {
-    Ok(preLogic(miniLogic()))
+    Ok(Json.toJson(miniLogic()))
   }
 
-  private def miniLogic():Session => JsValue = { implicit session: Session =>
-    val result = FormSampleDTO(1, "success")
-    Json.toJson(result)
+  private def miniLogic():FormSampleDTO = DB.withSession{implicit session =>
+    FormSampleDTO(1, "success")
   }
 
   def putTopSample(id: Long) = Action {request =>
     require(id >= 0)
-    require(isCorrectReq(request))
-    val jsValue = request.body.asJson.get
-    val formDto = Json.fromJson[FormSampleDTO](jsValue).get
-    Ok(preLogic(logic1(formDto)))
+    SessionUtil.isCorrectReq(request)
+    val formDto = FormSampleDTO.fromJson(request.body.asJson)
+    val formSample = logic1(formDto)
+    Ok(Json.toJson(formSample))
   }
 
-//  def fromJson[T](request: Request[AnyContent]):T = {
-//    val jsValue = request.body.asJson.get
-//    Json.fromJson[T](jsValue).get
-//  }
-
-  private def logic1(form: FormSampleDTO):Session => JsValue = { implicit session: Session =>
+  private def logic1(form: FormSampleDTO):FormSampleDTO = DB.withSession{implicit  session =>
     FormSampleDao.create(form)
-    val formNew = FormSampleDao.getById(form.id+1).get
-    Json.toJson(FormSampleDTO(formNew.id, "Hello " + formNew.formStr))
+    val opt = FormSampleDao.getById(form.id+1)
+    val formNew = opt match {
+      case None => throw new Exception("please retry")
+      case Some(u) => u
+    }
+    FormSampleDTO(formNew.id, "Hello " + formNew.formStr)
   }
 
   def upload = Action(parse.multipartFormData) { request =>
@@ -54,34 +52,13 @@ object Sample extends Controller {
 
   def getCustomer(id: Long) = Action {rs =>
     require(id >= 0)
-    Ok(preLogic(logic2(id)))
+    Ok(Json.toJson(logic2(id)))
   }
 
-  private def logic2(id:Long):Session => JsValue = {implicit session =>
+  private def logic2(id:Long):CustomerDTO = DB.withSession {implicit session =>
       CustomerDao.create(CustomerDTO(-1, "name"))
       CustomerDao.update(CustomerDTO(1, "update"))
       val customer = CustomerDao.searchByID(id).get
-      val result = CustomerDTO(customer.id, customer.name)
-      Json.toJson(result)
+      CustomerDTO(customer.id, customer.name)
   }
-
-  //this method provide slick-Session
-  def preLogic(func:Session => JsValue):JsValue = DB.withSession {session=>
-    try{
-      func(session)
-    } catch {
-      // exception like this...
-      //case e: TransactionException => Left("your post data is old")
-      //case e: JdbcSQLException => Left(ErrorMessage("your sql is not good"))//transaction?
-      //case e: JsResultException => Json.toJson(ErrorMessage("Bad request"))
-      case e: Exception => Json.toJson(ErrorMessage("Internal server error"))
-    }
-  }
-
-  def isCorrectReq[A](request : Request[A]) = {
-    request.headers.get("X-Requested-With") == Some("XMLHttpRequest")&&
-    request.headers.get("Host") == Some("localhost:9000")&&
-    request.headers.get("Origin") == Some("http://localhost:9000")
-  }
-
 }

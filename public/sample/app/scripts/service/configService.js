@@ -9,10 +9,10 @@
             console.log('service.configService.post');
             var bacon = dao.configDao.post(formValue);
             //when post was success(include correct error msg)
-            bacon.onValue(function(res){util.okDialog(res, okCallBack);});
+            bacon.onValue(util.okFunc(okCallBack));
 
             //when post was error(internal server error)
-            bacon.onError(util.errorDialog);
+            bacon.onError(util.ngFunc());
         },
 
         load : function () {

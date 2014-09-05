@@ -2,7 +2,7 @@ package daos
 
 import models.PRMUser
 import play.api.db.slick.Config.driver.simple._
-import entities.{PRMUserEntity, FormSampleEntity, PRMUserTable}
+import entities.{PRMUserEntity, PRMUserTable}
 
 object UserDao {
   lazy val query = PRMUserTable.query
@@ -15,13 +15,9 @@ object UserDao {
     }
   }
 
-  def encript(s: String): String = {
-    s + "aaa"
-  }
-
   def create(user: PRMUser)(implicit s: Session) = {
     //if id is O.AutoInc, of course autoIncrement
-    val newUser = PRMUserEntity(-1, user.name, encript(user.pass))
+    val newUser = PRMUserEntity(-1, user.name, user.pass)
     query.insert(newUser)
   }
 //
