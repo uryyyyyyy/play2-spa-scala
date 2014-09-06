@@ -19,7 +19,7 @@
             bacon.onValue(util.okFunc(okCallBack));
 
             //when post was error(internal server error)
-            bacon.onError(util.ngFunc());
+            bacon.onError(util.ngFunc);
         },
 
         fileUpload : function (fd) {
