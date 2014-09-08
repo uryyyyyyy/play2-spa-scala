@@ -1,6 +1,6 @@
 package controllers
 
-import daos.{CustomerDao, FormSampleDao}
+import daos.{CustomerDaoImpl, FormSampleDaoImpl}
 import models.{CustomerDTO, FormSampleDTO}
 import play.api._
 import play.api.libs.json.Json
@@ -11,7 +11,7 @@ import util.{SessionUtil, S3Uploader}
 object SampleController extends Controller {
 
   def getTopSample(id: Long) = Action {
-    Ok(Json.toJson(SampleService.miniLogic()))
+      Ok(Json.toJson(SampleService.miniLogic))
   }
 
   def putTopSample(id: Long) = Action {request =>
@@ -37,6 +37,7 @@ object SampleController extends Controller {
 
   def getCustomer(id: Long) = Action {rs =>
     require(id >= 0)
-    Ok(Json.toJson(SampleService.logic2(id, CustomerDao)))
+    val c = SampleService.logic2(id, CustomerDaoImpl)
+    Ok(Json.toJson(c))
   }
 }

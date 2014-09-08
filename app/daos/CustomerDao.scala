@@ -1,39 +1,17 @@
 package daos
 
-import entities.{CustomerEntity, CustomerTable}
+import entities.CustomerEntity
 import models.CustomerDTO
+import play.api.db.slick.Session
 
-/**
- * 1 import package related in Slick
- */
-import play.api.db.slick.Config.driver.simple._
+trait CustomerDao {
 
-/**
- * 4 DAO definition
- */
-object CustomerDao extends CustomerDaoT{
-  lazy val query = CustomerTable.query
+  def searchByName(name: String, s: Session): List[CustomerEntity]
 
-  def searchByName(name: String)(implicit s: Session): List[CustomerEntity] = {
-    query.filter(row => row.name like "%" + name + "%").list
-  }
+  def searchByID(id: Long, s: Session): Option[CustomerEntity]
 
-  def searchByID(id: Long)(implicit s: Session): Option[CustomerEntity] = {
-    query.filter(_.id === id).firstOption
-  }
+  def create(customer: CustomerDTO, s: Session)
 
-  def create(customer: CustomerDTO)(implicit s: Session) = {
-    //if id is O.AutoInc, of course autoIncrement
-    val newC = CustomerEntity(-1, customer.name)
-    query.insert(newC)
-  }
+  def update(customer: CustomerDTO, s: Session)
 
-  def update(customer: CustomerDTO)(implicit s: Session) = {
-    val newC = CustomerEntity(customer.id, customer.name)
-    query.filter(_.id === customer.id).update(newC)
-  }
-
-//  def remove(customer: CustomerEntity)(implicit s: Session) {
-//    customerQuery.filter(_.id === customer.id).delete
-//  }
 }
