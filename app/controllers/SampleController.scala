@@ -15,7 +15,7 @@ object SampleController extends Controller {
     Ok(Json.toJson(miniLogic()))
   }
 
-  private def miniLogic():FormSampleDTO = DB.withSession{implicit session =>
+  def miniLogic():FormSampleDTO = DB.withSession{implicit session =>
     FormSampleDTO(1, "success")
   }
 

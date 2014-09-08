@@ -3,8 +3,8 @@ POST    /config                                                         controll
 GET    /config                                                         controllers.ConfigController.lookSession
 
 
-GET    /topSample/:id                                                         controllers.Sample.getTopSample(id: Long)
-POST    /topSample/:id                                                         controllers.Sample.putTopSample(id: Long)
+GET    /topSample/:id                                                         controllers.SampleController.getTopSample(id: Long)
+POST    /topSample/:id                                                         controllers.SampleController.putTopSample(id: Long)
 
-GET    /customer/:id                                                         controllers.Sample.getCustomer(id: Long)
-POST    /upload                                                         controllers.Sample.upload
+GET    /customer/:id                                                         controllers.SampleController.getCustomer(id: Long)
+POST    /upload                                                         controllers.SampleController.upload
