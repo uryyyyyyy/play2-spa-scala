@@ -11,7 +11,7 @@ import play.api.db.slick.Config.driver.simple._
 /**
  * 4 DAO definition
  */
-object CustomerDao {
+object CustomerDao extends CustomerDaoT{
   lazy val query = CustomerTable.query
 
   def searchByName(name: String)(implicit s: Session): List[CustomerEntity] = {
