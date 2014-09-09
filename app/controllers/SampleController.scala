@@ -1,12 +1,12 @@
 package controllers
 
-import daos.{CustomerDaoImpl, FormSampleDaoImpl}
 import models.{CustomerDTO, FormSampleDTO}
 import play.api._
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import services.SampleService
 import util.{SessionUtil, S3Uploader}
+import di.Production._
 
 object SampleController extends Controller {
 
@@ -37,7 +37,7 @@ object SampleController extends Controller {
 
   def getCustomer(id: Long) = Action {rs =>
     require(id >= 0)
-    val c = SampleService.logic2(id, CustomerDaoImpl)
+    val c = SampleService.logic2(id)
     Ok(Json.toJson(c))
   }
 }

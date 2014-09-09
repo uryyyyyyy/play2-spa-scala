@@ -20,7 +20,7 @@ object SessionUtil {
   def getSessionFromCache(sessionId: String):SessionDTO = {
     val opt = Cache.getAs[SessionDTO](sessionId)
     opt match{
-      case None => throw new Exception("not found in cache")
+      case None => throw new Exception("no session (old session)")
       case Some(s) => s
     }
   }

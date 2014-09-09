@@ -1,0 +1,5 @@
+package di
+
+object Test{
+
+}
