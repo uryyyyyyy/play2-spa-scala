@@ -1,23 +1,23 @@
 package daos
 
-import models.PRMUser
+import models.User
 import play.api.db.slick.Config.driver.simple._
-import entities.{PRMUserEntity, PRMUserTable}
+import entities.{UserEntity, UserTable}
 
 object UserDao {
-  lazy val query = PRMUserTable.query
+  lazy val query = UserTable.query
 
-  def getByName(name: String)(implicit s: Session): Option[PRMUser] = {
+  def getByName(name: String)(implicit s: Session): Option[User] = {
     val entityOpt = query.filter(_.name === name).firstOption
     entityOpt match{
       case None => None
-      case Some(e) => Option(PRMUser(e.name, e.pass))
+      case Some(e) => Option(User(e.name, e.pass))
     }
   }
 
-  def create(user: PRMUser)(implicit s: Session) = {
+  def create(user: User)(implicit s: Session) = {
     //if id is O.AutoInc, of course autoIncrement
-    val newUser = PRMUserEntity(-1, user.name, user.pass)
+    val newUser = UserEntity(-1, user.name, user.pass)
     query.insert(newUser)
   }
 //

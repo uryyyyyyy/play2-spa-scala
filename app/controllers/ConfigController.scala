@@ -10,7 +10,7 @@ object ConfigController extends Controller {
   def config = Action {request =>
     require(SessionUtil.isCorrectReq(request))
     val jsValue = request.body.asJson.get
-    val user = PRMUser.fromJson(jsValue)
+    val user = User.fromJson(jsValue)
 
     val sessionId = SessionUtil.createSession(user)
     Ok("OK").withSession("sessinId" -> sessionId)

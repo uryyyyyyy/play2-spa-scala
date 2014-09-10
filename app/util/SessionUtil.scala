@@ -3,7 +3,7 @@ package util
 import java.security.MessageDigest
 
 import daos.UserDao
-import models.{PRMUser, SessionDTO}
+import models.{User, SessionDTO}
 import play.api.cache.Cache
 import play.api.db.slick._
 import play.api.mvc.Request
@@ -33,8 +33,8 @@ object SessionUtil {
     }
   }
 
-  def checkUser(user: PRMUser) = DB.withSession {implicit session =>
-    UserDao.create(PRMUser("admin", encript("admin")))
+  def checkUser(user: User) = DB.withSession {implicit session =>
+    UserDao.create(User("admin", encript("admin")))
     val sameUser = UserDao.getByName(user.name) match{
       case None => throw new Exception("user name fail")
       case Some(u) => u
@@ -52,7 +52,7 @@ object SessionUtil {
     java.util.UUID.randomUUID.toString
   }
 
-  def createSession(user: PRMUser): String = {
+  def createSession(user: User): String = {
     SessionUtil.checkUser(user)
     val sessionId = createSessionId
     val session = SessionDTO(user.name, sessionId)
