@@ -5,20 +5,22 @@ import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.{ListObjectsRequest, GetObjectRequest, PutObjectRequest}
 import com.amazonaws.services.s3.transfer.TransferManager
 import java.io.File
+import play.api.Play.current
+import play.api.Play
 
 
 object S3Uploader {
-  val AWS_ACCESS_KEY = ""
-  val AWS_SECRET_KEY = ""
+  val AWS_ACCESS_KEY = Play.application.configuration.getString("aws.accessKey").get
+  val AWS_SECRET_KEY = Play.application.configuration.getString("aws.secretKey").get
 
   def post = {
 
     val credentials = new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY)
     val s3Client = new AmazonS3Client(credentials)
     print("user認証クリア")
-    val localFile = new File("./test.txt")
+    val localFile = new File("./build.sbt")
     val s3BucketName = "uryyyyyyy"
-    val s3FilePath = "test.txt"
+    val s3FilePath = "build.sbt"
     val upReq = new PutObjectRequest(s3BucketName, s3FilePath, localFile)
     s3Client.putObject(upReq)
   }
