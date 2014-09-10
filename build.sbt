@@ -13,5 +13,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "0.8.0",
   "com.amazonaws" % "aws-java-sdk" % "1.8.9.1",
   "org.scalatestplus" %% "play" % "1.1.0" % "test",
-  "org.mockito" % "mockito-core" % "1.8.5"
+  "org.mockito" % "mockito-core" % "1.8.5",
+  "org.jumpmind.symmetric.jdbc" % "mariadb-java-client" % "1.1.1"
 )
