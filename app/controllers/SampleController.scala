@@ -28,7 +28,7 @@ object SampleController extends Controller {
       val filename = postedFile.filename
       val contentType = postedFile.contentType
       postedFile.ref.moveTo(new File("tmp/" + filename))
-      S3Uploader.put(new File("tmp/" + filename))
+      S3Uploader.post
       Ok(filename + contentType)
     }.getOrElse {
       Ok("miss")
