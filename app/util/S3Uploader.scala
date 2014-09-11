@@ -1,6 +1,6 @@
 package util
 
-import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.{ListObjectsRequest, GetObjectRequest, PutObjectRequest}
 import com.amazonaws.services.s3.transfer.TransferManager
@@ -10,26 +10,20 @@ import play.api.Play
 
 
 object S3Uploader {
-  val AWS_ACCESS_KEY = Play.application.configuration.getString("aws.accessKey").get
-  val AWS_SECRET_KEY = Play.application.configuration.getString("aws.secretKey").get
+  val credential = new ProfileCredentialsProvider("sample")
+  val s3Client = new AmazonS3Client(new ProfileCredentialsProvider("sample"))
+  val bucketName = Play.application.configuration.getString("aws.s3.bucketName").get
 
   def post = {
-
-    val credentials = new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY)
-    val s3Client = new AmazonS3Client(credentials)
     print("user認証クリア")
     val localFile = new File("./build.sbt")
-    val s3BucketName = "uryyyyyyy"
     val s3FilePath = "build.sbt"
-    val upReq = new PutObjectRequest(s3BucketName, s3FilePath, localFile)
+    val upReq = new PutObjectRequest(bucketName, s3FilePath, localFile)
     s3Client.putObject(upReq)
   }
 
   def download() = {
-    val credentials = new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY)
 
-    //バケット名
-    val s3BucketName ="uryyyyyyy"
     //オブジェクトのパス
     val s3ObjectPath = "test.txt"
     //ダウンロード先のパス（ローカル）
@@ -38,8 +32,8 @@ object S3Uploader {
     //ダウンロード中のパス
     val downloadingFile = new File("./test/test.txt" + ".tmp")
 
-    val req = new GetObjectRequest(s3BucketName, s3ObjectPath)
-    val tm = new TransferManager(credentials)
+    val req = new GetObjectRequest(bucketName, s3ObjectPath)
+    val tm = new TransferManager(credential)
     val s3Obj = new AmazonS3Client().getObject(req)
 
     try {
@@ -71,11 +65,6 @@ object S3Uploader {
   }
 
   def list() = {
-    val credentials = new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY)
-
-    val s3Client = new AmazonS3Client(credentials)
-
-    val s3BucketName = "uryyyyyyy"
     val s3FilePath = ""
 
     //リスティングで多すぎる場合、マーカーを保持しておかないといけない。
@@ -89,7 +78,7 @@ object S3Uploader {
 
       val listReq = new ListObjectsRequest()
       listReq.setPrefix(s3FilePath)
-      listReq.setBucketName(s3BucketName)
+      listReq.setBucketName(bucketName)
 
       listReq.setMarker(nextMarker)
 
