@@ -24,7 +24,7 @@ object SampleService {
     CustomerDTO(customer.id, customer.name)
   }
 
-  def miniLogic:FormSampleDTO = DB("default").withTransaction { session: Session =>
+  def miniLogic:FormSampleDTO = DB.withTransaction { session: Session =>
     FormSampleDTO(1, "success")
   }
 

@@ -7,18 +7,18 @@ import entities.{UserEntity, UserTable}
 object UserDao {
   lazy val query = UserTable.query
 
-  def getByName(name: String)(implicit s: Session): Option[User] = {
-    val entityOpt = query.filter(_.name === name).firstOption
+  def getByName(name: String)(s: Session): Option[User] = {
+    val entityOpt = query.filter(_.name === name).firstOption(s)
     entityOpt match{
       case None => None
       case Some(e) => Option(User(e.name, e.pass))
     }
   }
 
-  def create(user: User)(implicit s: Session) = {
+  def create(user: User)(s: Session) = {
     //if id is O.AutoInc, of course autoIncrement
     val newUser = UserEntity(-1, user.name, user.pass)
-    query.insert(newUser)
+    query.insert(newUser)(s)
   }
 //
 //  def update(form: PRMUser)(implicit s: Session) = {
