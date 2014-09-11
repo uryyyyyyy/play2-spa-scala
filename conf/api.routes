@@ -1,6 +1,6 @@
 
-POST    /config                                                         controllers.ConfigController.config
-GET    /config                                                         controllers.ConfigController.lookSession
+POST    /config/auth                                                         controllers.ConfigController.config
+GET    /config/isAuth                                                         controllers.ConfigController.isAuthorized
 
 
 GET    /topSample/:id                                                         controllers.SampleController.getTopSample(id: Long)

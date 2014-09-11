@@ -1,7 +1,6 @@
 package daos
 
-import entities.{FormSampleEntity, CustomerEntity}
-import models.{FormSampleDTO, CustomerDTO}
+import models.FormSampleDTO
 import play.api.db.slick.Session
 
 trait FormSampleDao {

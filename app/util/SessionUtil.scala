@@ -1,20 +1,17 @@
 package util
 
-import java.security.MessageDigest
-
 import daos.UserDao
-import entities.CustomerEntity
-import models.{User, SessionDTO, CustomerDTO}
-import play.api.cache.Cache
+import models.{User, SessionDTO}
 import play.api.db.slick._
-import play.api.mvc.Request
+import play.api.mvc.{AnyContent, Request, Headers}
 
 trait SessionUtil {
 
-  def isCorrectReq[A](request : Request[A]):Boolean
+  def isCorrectReq[A](request : Headers):Boolean
 
-  def createSession(user: User)(s:Session): String
+  def createSession(user: User)(s:Session)(implicit userDao: UserDao): String
 
   def getSessionFromCache(sessionId: String):SessionDTO
 
+  def checkSession[A](request : Request[AnyContent])(implicit sessionUtil: SessionUtil):SessionDTO
 }

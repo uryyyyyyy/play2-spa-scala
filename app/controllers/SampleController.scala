@@ -1,10 +1,10 @@
 package controllers
 
-import models.{CustomerDTO, FormSampleDTO}
+import models.FormSampleDTO
 import play.api._
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
-import services.{SessionService, SampleService}
+import services.SampleService
 import util.{SessionUtilImpl, S3Uploader}
 import di.Production._
 
@@ -16,7 +16,7 @@ object SampleController extends Controller {
 
   def putTopSample(id: Long) = Action {request =>
     require(id >= 0)
-    SessionService.checkSession(request)
+    SessionUtilImpl.checkSession(request)
     val formDto = FormSampleDTO.fromJson(request.body.asJson)
     val formSample = SampleService.logic1(formDto)
     Ok(Json.toJson(formSample))

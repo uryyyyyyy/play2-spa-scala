@@ -14,12 +14,17 @@ import play.api.db.slick.Config.driver.simple._
 object CustomerDaoImpl extends CustomerDao{
   lazy val query = CustomerTable.query
 
-  override def searchByName(name: String, s: Session): List[CustomerEntity] = {
-    query.filter(row => row.name like "%" + name + "%").list(s)
+  override def searchByName(name: String, s: Session): List[CustomerDTO] = {
+    val list = query.filter(row => row.name like "%" + name + "%").list(s)
+    list.map(entity => CustomerDTO(entity.id, entity.name))
   }
 
-  override def searchByID(id: Long, s: Session): Option[CustomerEntity] = {
-    query.filter(_.id === id).firstOption(s)
+  override def searchByID(id: Long, s: Session): Option[CustomerDTO] = {
+    val opt = query.filter(_.id === id).firstOption(s)
+    opt match {
+      case None => None
+      case Some(entity) => Option(CustomerDTO(entity.id, entity.name))
+    }
   }
 
   override def create(customer: CustomerDTO, s: Session) = {

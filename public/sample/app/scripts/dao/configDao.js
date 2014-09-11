@@ -11,13 +11,8 @@
         post: function (reqData) {
             console.log('dao.configDao.save');
             return Bacon.fromPromise(
-                util.postAjaxAsync('jsonApi/config', JSON.stringify(reqData))
+                util.postAjaxAsync('jsonApi/config/auth', JSON.stringify(reqData))
             );
-        },
-
-        getSession: function () {
-            console.log('dao.mainDao.load');
-            return Bacon.fromPromise(util.getAjaxAsync('jsonApi/config'));
-        },
+        }
     };
 })(jQuery);

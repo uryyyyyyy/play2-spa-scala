@@ -1,19 +1,19 @@
 package controllers
-import play.api._
 import play.api.libs.json.Json
-import play.api.mvc.{AnyContent, Request, Action, Controller}
+import play.api.mvc.{Action, Controller}
 import services.SessionService
 import di.Production._
+import util.SessionUtilImpl
 
 object ConfigController extends Controller {
 
   def config = Action {request =>
-    val sessionId: String = SessionService.checkUserIsCorrect(request)
+    val sessionId: String = SessionService.checkUserIsCorrect(request.headers, request.body.asJson)
     Ok("OK").withSession("sessinId" -> sessionId)
   }
 
-  def lookSession = Action { request =>
-    val sessionDto = SessionService.checkSession(request)
+  def isAuthorized = Action { request =>
+    val sessionDto = SessionUtilImpl.checkSession(request)
     Ok(Json.toJson(sessionDto))
   }
 

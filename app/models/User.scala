@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.json.{JsValue, Json}
 
-case class User(name: String, pass: String)
+case class User(id: String, pass: String)
 
 object User {
   //these implicit serve convert(Json <-> ScalaObject)
