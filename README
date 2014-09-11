@@ -65,3 +65,18 @@ this can execute JSHint, minify and do on
 
 ## how to develop serverSide
 
+
+
+
+## Done
+
+* connect mariaDB
+* connect multiple schema(may be multiple DB)
+* separate client-side & server-side
+* access between server-client with json
+* use multiple schema with DB migration(evolution)
+* upload to aws-S3
+* use mock test with `implicit parameter`
+* use cookie for session-management
+* support client access Async
+* handle error-messages (client-server)
