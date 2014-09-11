@@ -12,28 +12,28 @@ import play.api.mvc.MultipartFormData.FilePart
 
 
 object S3UtilImpl extends S3Util {
-  val credential = new ProfileCredentialsProvider
-  val s3Client = new AmazonS3Client(new ProfileCredentialsProvider)
-  val s3BucketName = Play.application.configuration.getString("aws.s3.bucketName").get
+	//`ProfileCredentialsProvider` check your local credential file(~/.aws/credential)
+	val credential = new ProfileCredentialsProvider
+	val s3Client = new AmazonS3Client(new ProfileCredentialsProvider)
+	val s3BucketName = Play.application.configuration.getString("aws.s3.bucketName").get
 
-	override def post(postedFile : FilePart[TemporaryFile]):String = {
+	override def post(postedFile: FilePart[TemporaryFile]): String = {
 		//val contentType = postedFile.contentType
 		val file = new File("tmp/upload/" + HashUtil.hash)
 		postedFile.ref.moveTo(file)
-		val upReq = new PutObjectRequest(s3BucketName, postedFile.filename, file)
+		val s3FilePath = "files/" + postedFile.filename
+		val upReq = new PutObjectRequest(s3BucketName, s3FilePath, file)
 		s3Client.putObject(upReq)
 		postedFile.filename
 	}
 
 	override def download(fileName: String): File = {
-		val req = new GetObjectRequest(s3BucketName, fileName)
 		val tm = new TransferManager(credential)
-		//ダウンロード中のパス
 		val downloadingFile = new File("./tmp/download/" + HashUtil.hash)
-
+		val s3FilePath = "files/" + fileName
+		val req = new GetObjectRequest(s3BucketName, s3FilePath)
 		try {
-			val download = tm.download(req, downloadingFile)
-			downloading(download)
+			downloading(tm.download(req, downloadingFile))
 			downloadingFile
 		} finally {
 			tm.shutdownNow()

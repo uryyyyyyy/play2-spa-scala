@@ -65,13 +65,16 @@ this can execute JSHint, minify and do on
 
 ## how to develop serverSide
 
-
+```
+./activator {idea or eclipse or...}
+```
 
 
 ## Done
 
 * connect mariaDB
 * connect multiple schema(may be multiple DB)
+* support DB-transaction (this logic is written in controller, is it bad design?)
 * separate client-side & server-side
 * access between server-client with json
 * use multiple schema with DB migration(evolution)

@@ -8,10 +8,13 @@ import util.SessionUtil
 import di.Production._
 
 object SessionService {
-	def checkSession(request: Request[AnyContent])(implicit sessionUtil: SessionUtil):SessionDTO = {
-		sessionUtil.checkSession(request)
+	def isPostAuthorized(request: Request[AnyContent])(implicit sessionUtil: SessionUtil):SessionDTO = {
+		sessionUtil.isPostAuthorized(request)
 	}
 
+	def isGetAuthorized(request: Request[AnyContent])(implicit sessionUtil: SessionUtil):SessionDTO = {
+		sessionUtil.isGetAuthorized(request)
+	}
 
 	def checkUserIsCorrect(session: Session, header: Headers, json: Option[JsValue])
 	                      (implicit sessionUtil: SessionUtil): String = {

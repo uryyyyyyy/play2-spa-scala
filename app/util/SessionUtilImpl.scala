@@ -40,8 +40,16 @@ object SessionUtilImpl extends SessionUtil {
 		require(sameUser.pass == HashUtil.hash(user.pass), "pass not match")
 	}
 
-	override def checkSession[A](request: Request[AnyContent])(implicit sessionUtil: SessionUtil): SessionDTO = {
-		require(isCorrectReq(request.headers))
+	override def isPostAuthorized[A](request: Request[AnyContent])(implicit sessionUtil: SessionUtil): SessionDTO = {
+		require(isCorrectReq[A](request.headers))
+		val opt = request.session.get("sessinId")
+		opt match {
+			case None => throw new Exception("no session")
+			case Some(s) => getSessionFromCache(s)
+		}
+	}
+
+	override def isGetAuthorized(request: Request[AnyContent])(implicit sessionUtil: SessionUtil): SessionDTO = {
 		val opt = request.session.get("sessinId")
 		opt match {
 			case None => throw new Exception("no session")

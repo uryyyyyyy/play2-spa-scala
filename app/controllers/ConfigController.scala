@@ -16,7 +16,7 @@ object ConfigController extends Controller {
 	}
 
 	def isAuthorized = Action { request =>
-		val sessionDto = SessionService.checkSession(request)
+		val sessionDto = SessionService.isGetAuthorized(request)
 		Ok(Json.toJson(sessionDto))
 	}
 }
