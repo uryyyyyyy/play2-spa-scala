@@ -2,9 +2,9 @@ package util
 
 trait S3Uploader {
 
-	def post()
+  def post()
 
-	def download()
+  def download()
 
-	def list()
+  def list()
 }
