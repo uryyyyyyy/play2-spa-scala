@@ -13,7 +13,8 @@ import play.api.Play.current
 object SampleController extends Controller {
 
   def getTopSample(id: Long) = Action {
-      Ok(Json.toJson(SampleService.miniLogic))
+	  val res = DB.withTransaction(SampleService.miniLogic(_))
+	  Ok(Json.toJson(res))
   }
 
   def putTopSample(id: Long) = Action {request =>
@@ -39,7 +40,7 @@ object SampleController extends Controller {
 
   def getCustomer(id: Long) = Action {rs =>
     require(id >= 0)
-    val c = SampleService.logic2(id)
+    val c = DB.withSession(SampleService.logic2(_, id))
     Ok(Json.toJson(c))
   }
 }

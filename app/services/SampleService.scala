@@ -2,8 +2,7 @@ package services
 
 import daos.{FormSampleDao, CustomerDao}
 import models.{CustomerDTO, FormSampleDTO}
-import play.api.db.slick._
-import play.api.Play.current
+import play.api.db.slick.Session
 
 object SampleService {
 
@@ -17,13 +16,13 @@ object SampleService {
 		FormSampleDTO(formNew.id, formNew.formStr)
 	}
 
-	def logic2(id: Long)(implicit dao: CustomerDao): CustomerDTO = DB.withTransaction { session: Session =>
+	def logic2(session: Session, id: Long)(implicit dao: CustomerDao): CustomerDTO = {
 		dao.create(CustomerDTO(-1, "name"), session)
 		dao.update(CustomerDTO(1, "update"), session)
 		dao.searchByID(id, session).get
 	}
 
-	def miniLogic: FormSampleDTO = DB.withTransaction { session: Session =>
+	def miniLogic(session: Session): FormSampleDTO = {
 		FormSampleDTO(1, "success")
 	}
 

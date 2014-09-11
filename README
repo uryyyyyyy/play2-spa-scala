@@ -2,3 +2,66 @@ This is your new Play application
 =================================
 
 This file will be packaged with your application, when using `activator dist`.
+
+
+## how to use
+
+```
+# setup play2.3.X
+cd [projectRoot]
+./activator [idea or eclipse]
+
+# setup javascript tools
+# (you need npm, grunt-cli)
+cd public/sample
+npm install
+
+cd app
+bower install
+
+```
+
+
+## how to develop clientSide
+
+### start local-server
+
+```
+cd [projectRoot]/public/sample
+grunt server
+```
+
+and check `localhost:9000`.
+
+
+you can use jsonAPI-server too.
+
+`[projectRoot]/public/sample/app/jsonApi`
+
+### add third party library
+
+```
+cd [projectRoot]/public/sample/app
+bower search [keyword you want]
+bower install [libs you want] --save
+
+```
+
+and add `bower_component/[libs]` to `index.html`
+
+### compile
+
+if you develop and test on your local-server,
+
+please compile your code
+
+```
+# in [projectRoot]/public/sample
+grunt
+
+```
+
+this can execute JSHint, minify and do on
+
+## how to develop serverSide
+
