@@ -8,10 +8,9 @@ import java.io.File
 object S3UploadService {
 
 	def uploadToS3(file: Option[FilePart[TemporaryFile]])(implicit s3Uploader: S3Util): String = {
-		file.map { postedFile =>
-			s3Uploader.post(postedFile)
-		}.getOrElse {
-			"miss"
+		file match {
+			case None => "miss"
+			case Some(s) => s3Uploader.post(s)
 		}
 	}
 

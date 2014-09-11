@@ -1,7 +1,5 @@
 package util
 
-import java.security.MessageDigest
-
 import daos.UserDao
 import models.{User, SessionDTO}
 import play.api.cache.Cache
