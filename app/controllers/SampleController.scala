@@ -31,7 +31,10 @@ object SampleController extends Controller {
 
 	def download(fileName: String) = Action { request =>
 		val file = S3UploadService.downloadFromS3(fileName)
-		Ok.sendFile(file)
+		Ok.sendFile(
+			content = file,
+			fileName = _ => fileName
+		)
 	}
 
 	def getCustomer(id: Long) = Action { rs =>

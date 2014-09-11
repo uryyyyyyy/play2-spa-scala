@@ -3,15 +3,15 @@ package util
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.{ListObjectsRequest, GetObjectRequest, PutObjectRequest}
-import com.amazonaws.services.s3.transfer.TransferManager
+import com.amazonaws.services.s3.transfer.{Download, TransferManager}
 import java.io.File
 import play.api.Play.current
-import play.api.Play
+import play.api.{Logger, Play}
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData.FilePart
 
 
-object S3UploaderImpl extends S3Uploader {
+object S3UtilImpl extends S3Util {
   val credential = new ProfileCredentialsProvider
   val s3Client = new AmazonS3Client(new ProfileCredentialsProvider)
   val s3BucketName = Play.application.configuration.getString("aws.s3.bucketName").get
@@ -26,38 +26,26 @@ object S3UploaderImpl extends S3Uploader {
 	}
 
 	override def download(fileName: String): File = {
-
 		val req = new GetObjectRequest(s3BucketName, fileName)
 		val tm = new TransferManager(credential)
-		val s3Obj = new AmazonS3Client().getObject(req)
 		//ダウンロード中のパス
-		val downloadingFile = new File("./tmp/download/" + HashUtil.hash + ".download")
+		val downloadingFile = new File("./tmp/download/" + HashUtil.hash)
 
 		try {
-
-			val totalWork = s3Obj.getObjectMetadata.getContentLength
 			val download = tm.download(req, downloadingFile)
-
-			var lastTransferred = 0L
-
-			while (!download.isDone) {
-				val transferred = download.getProgress.getBytesTransferred
-				lastTransferred = transferred
-
-				println(s"progress ${download.getProgress.getPercentTransferred}%")
-
-				Thread.sleep(100)
-			}
-			download.waitForCompletion()
-			download
-			//ファイルをリネーム
-			downloadingFile.renameTo(new File("./tmp/download/" + fileName))
+			downloading(download)
 			downloadingFile
 		} finally {
-			try {
-				tm.shutdownNow()
-			}
+			tm.shutdownNow()
 		}
+	}
+
+	private def downloading(download: Download) {
+		while (!download.isDone) {
+			Logger.info(s"progress ${download.getProgress.getPercentTransferred}%")
+			Thread.sleep(100)
+		}
+		download.waitForCompletion()
 	}
 
 	override def list() = {

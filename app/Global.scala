@@ -16,7 +16,7 @@ object Global extends GlobalSettings {
 //      case e: Exception => Json.toJson(ErrorMessage(e.getMessage))
 //      case e: IllegalArgumentException => Json.toJson(ErrorMessage(e.getMessage))
 //    }
-    Logger.info(ex.getMessage)
+    Logger.debug(ex.getMessage)
     Future.successful(InternalServerError(Json.toJson(ErrorMessage(ex.getMessage))))
   }
 
