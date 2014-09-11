@@ -2,11 +2,13 @@ package controllers
 
 import models.FormSampleDTO
 import play.api._
+import play.api.db.slick._
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import services.SampleService
 import util.{SessionUtilImpl, S3Uploader}
 import di.Production._
+import play.api.Play.current
 
 object SampleController extends Controller {
 
@@ -18,7 +20,7 @@ object SampleController extends Controller {
     require(id >= 0)
     SessionUtilImpl.checkSession(request)
     val formDto = FormSampleDTO.fromJson(request.body.asJson)
-    val formSample = SampleService.logic1(formDto)
+    val formSample = DB.withTransaction(SampleService.logic1(_, formDto))
     Ok(Json.toJson(formSample))
   }
 
