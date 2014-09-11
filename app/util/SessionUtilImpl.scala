@@ -27,7 +27,7 @@ object SessionUtilImpl extends SessionUtil {
 
 	override def createSession(user: User)(s: Session)(implicit userDao: UserDao): String = {
 		checkUser(user, userDao)(s)
-		val sessionId = createSessionId
+		val sessionId = HashUtil.hash
 		val session = SessionDTO(user.id, sessionId)
 		Cache.set(sessionId, session)
 		sessionId
@@ -39,17 +39,7 @@ object SessionUtilImpl extends SessionUtil {
 			case None => throw new Exception("user name fail")
 			case Some(u) => u
 		}
-		require(sameUser.pass == encript(user.pass), "pass not match")
-	}
-
-	private def encript(s: String): String = {
-		val md = MessageDigest.getInstance("SHA-1")
-		md.update(s.getBytes)
-		md.digest.foldLeft("") { (s, b) => s + "%02x".format(if (b < 0) b + 256 else b)}
-	}
-
-	private def createSessionId: String = {
-		java.util.UUID.randomUUID.toString
+		require(sameUser.pass == HashUtil.hash(user.pass), "pass not match")
 	}
 
 	override def checkSession[A](request: Request[AnyContent])(implicit sessionUtil: SessionUtil): SessionDTO = {

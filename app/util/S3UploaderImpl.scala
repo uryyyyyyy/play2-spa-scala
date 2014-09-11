@@ -1,46 +1,37 @@
 package util
 
-import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.{ListObjectsRequest, GetObjectRequest, PutObjectRequest}
 import com.amazonaws.services.s3.transfer.TransferManager
 import java.io.File
 import play.api.Play.current
 import play.api.Play
+import play.api.libs.Files.TemporaryFile
+import play.api.mvc.MultipartFormData.FilePart
 
 
 object S3UploaderImpl extends S3Uploader {
-	val AWS_ACCESS_KEY = Play.application.configuration.getString("aws.accessKey").get
-	val AWS_SECRET_KEY = Play.application.configuration.getString("aws.secretKey").get
+  val credential = new ProfileCredentialsProvider
+  val s3Client = new AmazonS3Client(new ProfileCredentialsProvider)
+  val s3BucketName = Play.application.configuration.getString("aws.s3.bucketName").get
 
-	override def post() = {
-
-		val credentials = new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY)
-		val s3Client = new AmazonS3Client(credentials)
-		print("user認証クリア")
-		val localFile = new File("./build.sbt")
-		val s3BucketName = "uryyyyyyy"
-		val s3FilePath = "build.sbt"
-		val upReq = new PutObjectRequest(s3BucketName, s3FilePath, localFile)
+	override def post(postedFile : FilePart[TemporaryFile]):String = {
+		//val contentType = postedFile.contentType
+		val file = new File("tmp/upload/" + HashUtil.hash)
+		postedFile.ref.moveTo(file)
+		val upReq = new PutObjectRequest(s3BucketName, postedFile.filename, file)
 		s3Client.putObject(upReq)
+		postedFile.filename
 	}
 
-	override def download() = {
-		val credentials = new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY)
+	override def download(fileName: String): File = {
 
-		//バケット名
-		val s3BucketName = "uryyyyyyy"
-		//オブジェクトのパス
-		val s3ObjectPath = "test.txt"
-		//ダウンロード先のパス（ローカル）
-		val downloadFile = new File("./test/test.txt")
-
-		//ダウンロード中のパス
-		val downloadingFile = new File("./test/test.txt" + ".tmp")
-
-		val req = new GetObjectRequest(s3BucketName, s3ObjectPath)
-		val tm = new TransferManager(credentials)
+		val req = new GetObjectRequest(s3BucketName, fileName)
+		val tm = new TransferManager(credential)
 		val s3Obj = new AmazonS3Client().getObject(req)
+		//ダウンロード中のパス
+		val downloadingFile = new File("./tmp/download/" + HashUtil.hash + ".download")
 
 		try {
 
@@ -58,24 +49,18 @@ object S3UploaderImpl extends S3Uploader {
 				Thread.sleep(100)
 			}
 			download.waitForCompletion()
-
+			download
+			//ファイルをリネーム
+			downloadingFile.renameTo(new File("./tmp/download/" + fileName))
+			downloadingFile
 		} finally {
 			try {
 				tm.shutdownNow()
 			}
-
-			//ファイルをリネーム
-			downloadingFile.renameTo(downloadFile)
-
 		}
 	}
 
 	override def list() = {
-		val credentials = new BasicAWSCredentials(AWS_ACCESS_KEY, AWS_SECRET_KEY)
-
-		val s3Client = new AmazonS3Client(credentials)
-
-		val s3BucketName = "uryyyyyyy"
 		val s3FilePath = ""
 
 		//リスティングで多すぎる場合、マーカーを保持しておかないといけない。

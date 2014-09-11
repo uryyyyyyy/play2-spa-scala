@@ -29,6 +29,11 @@ object SampleController extends Controller {
 		Ok(str)
 	}
 
+	def download(fileName: String) = Action { request =>
+		val file = S3UploadService.downloadFromS3(fileName)
+		Ok.sendFile(file)
+	}
+
 	def getCustomer(id: Long) = Action { rs =>
 		require(id >= 0)
 		val c = DB.withSession(SampleService.logic2(_, id))

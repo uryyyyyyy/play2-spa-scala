@@ -34,7 +34,11 @@
             $.ajax( 'jsonApi/upload', postData ).done(function(text){
               console.log(text);
             });
-        }
+        },
+
+        fileDownload : function (fileName) {
+			util.getAjaxAsync('jsonApi/download/' + fileName);
+		}
 
     };
 })(jQuery);
