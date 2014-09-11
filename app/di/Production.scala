@@ -1,15 +1,15 @@
 package di
 
 import daos.{UserDaoImpl, CustomerDaoImpl, FormSampleDaoImpl}
-import util.{S3Uploader, SessionUtilImpl}
+import util.{S3UploaderImpl, SessionUtilImpl}
 
 
 object Production {
 
-  implicit val formSampleDao = FormSampleDaoImpl
-  implicit val customerDao = CustomerDaoImpl
-  implicit val userDao = UserDaoImpl
+	implicit val formSampleDao = FormSampleDaoImpl
+	implicit val customerDao = CustomerDaoImpl
+	implicit val userDao = UserDaoImpl
 
-  implicit val sessionUtil = SessionUtilImpl
-  implicit val s3Uploader = S3Uploader
+	implicit val sessionUtil = SessionUtilImpl
+	implicit val s3Uploader = S3UploaderImpl
 }

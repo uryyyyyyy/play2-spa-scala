@@ -7,11 +7,11 @@ import play.api.mvc.{AnyContent, Request, Headers}
 
 trait SessionUtil {
 
-  def isCorrectReq[A](request : Headers):Boolean
+	def isCorrectReq[A](request: Headers): Boolean
 
-  def createSession(user: User)(s:Session)(implicit userDao: UserDao): String
+	def createSession(user: User)(s: Session)(implicit userDao: UserDao): String
 
-  def getSessionFromCache(sessionId: String):SessionDTO
+	def getSessionFromCache(sessionId: String): SessionDTO
 
-  def checkSession[A](request : Request[AnyContent])(implicit sessionUtil: SessionUtil):SessionDTO
+	def checkSession[A](request: Request[AnyContent])(implicit sessionUtil: SessionUtil): SessionDTO
 }
