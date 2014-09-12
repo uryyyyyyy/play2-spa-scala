@@ -9,3 +9,4 @@ POST    /topSample/:id                                                         c
 GET    /customer/:id                                                         controllers.SampleController.getCustomer(id: Long)
 POST    /upload                                                         controllers.SampleController.upload
 GET    /download/:fileName                                             controllers.SampleController.download(fileName: String)
+GET    /files/list                                             controllers.SampleController.list

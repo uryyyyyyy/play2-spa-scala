@@ -8,6 +8,7 @@ import play.api.mvc.{Action, Controller}
 import services.{S3UploadService, SessionService, SampleService}
 import di.Production._
 import play.api.Play.current
+import util.S3UtilImpl
 
 object SampleController extends Controller {
 
@@ -39,9 +40,14 @@ object SampleController extends Controller {
 		)
 	}
 
-	def getCustomer(id: Long) = Action { rs =>
+	def getCustomer(id: Long) = Action { request =>
 		require(id >= 0)
 		val c = DB.withSession(SampleService.logic2(_, id))
 		Ok(Json.toJson(c))
+	}
+
+	def list = Action { request =>
+		S3UtilImpl.list()
+		Ok("OK")
 	}
 }
