@@ -10,7 +10,7 @@ object CsvUtil {
 	}
 
 	def objectToCsv(obj: CustomerDTO): String = {
-		obj.id + "," + obj.name
+		obj.id + "," + obj.name + "\n"
 	}
 
 	// 前後のダブルクォーテーションを除去

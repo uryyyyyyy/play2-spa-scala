@@ -23,7 +23,7 @@ object CsvService {
 	}
 
 	def exportScv(session: Session, fileName: String)(implicit customerDao: CustomerDao): File = {
-		val list = customerDao.searchByName("sample", session)
+		val list = customerDao.searchByName("name", session)
 		val csvList = list.map(CsvUtil.objectToCsv)
 		val outputFile = new File("tmp/" + fileName)
 		val out = new PrintWriter(outputFile, "utf8")

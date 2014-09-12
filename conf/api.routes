@@ -10,3 +10,6 @@ GET    /customer/:id                                                         con
 POST    /upload                                                         controllers.FileController.upload
 GET    /download/:fileName                                             controllers.FileController.download(fileName: String)
 GET    /files/list                                             controllers.FileController.list
+
+GET    /csv/export/:fileName                                             controllers.CsvController.exportCsv(fileName: String)
+POST    /csv/import                                             controllers.CsvController.importCsv
