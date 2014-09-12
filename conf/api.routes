@@ -7,6 +7,6 @@ GET    /topSample/:id                                                         co
 POST    /topSample/:id                                                         controllers.SampleController.putTopSample(id: Long)
 
 GET    /customer/:id                                                         controllers.SampleController.getCustomer(id: Long)
-POST    /upload                                                         controllers.SampleController.upload
-GET    /download/:fileName                                             controllers.SampleController.download(fileName: String)
-GET    /files/list                                             controllers.SampleController.list
+POST    /upload                                                         controllers.FileController.upload
+GET    /download/:fileName                                             controllers.FileController.download(fileName: String)
+GET    /files/list                                             controllers.FileController.list

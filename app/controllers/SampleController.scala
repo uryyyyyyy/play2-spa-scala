@@ -5,10 +5,9 @@ import play.api._
 import play.api.db.slick._
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
-import services.{S3UploadService, SessionService, SampleService}
+import services.{FileService, SessionService, SampleService}
 import di.Production._
 import play.api.Play.current
-import util.S3UtilImpl
 
 object SampleController extends Controller {
 
@@ -26,28 +25,9 @@ object SampleController extends Controller {
 		Ok(Json.toJson(formSample))
 	}
 
-	def upload = Action(parse.multipartFormData) { request =>
-		val str = S3UploadService.uploadToS3(request.body.file("file"))
-		Ok(str)
-	}
-
-	def download(fileName: String) = Action { request =>
-		SessionService.isGetAuthorized(request)
-		val file = S3UploadService.downloadFromS3(fileName)
-		Ok.sendFile(
-			content = file,
-			fileName = _ => fileName
-		)
-	}
-
 	def getCustomer(id: Long) = Action { request =>
 		require(id >= 0)
 		val c = DB.withSession(SampleService.logic2(_, id))
 		Ok(Json.toJson(c))
-	}
-
-	def list = Action { request =>
-		S3UtilImpl.list()
-		Ok("OK")
 	}
 }

@@ -11,5 +11,5 @@ trait S3Util {
 
   def download(fileName: String): File
 
-  def list()
+  def list():List[String]
 }

@@ -51,7 +51,7 @@ object S3UtilImpl extends S3Util {
 		download.waitForCompletion()
 	}
 
-	override def list() = {
+	override def list():List[String] = {
 		val s3FilePath = "files/"
 		val listReq = new ListObjectsRequest()
 		listReq.setPrefix(s3FilePath)
@@ -59,7 +59,8 @@ object S3UtilImpl extends S3Util {
 
 		val objectListing = s3Client.listObjects(listReq)
 		val summaryList: mutable.Buffer[S3ObjectSummary] = objectListing.getObjectSummaries.asScala
-
-		summaryList.foreach(s => Logger.info(s.getKey + " : " + s.getSize + "byte"))
+		val strList = summaryList.map(s => s.getKey + " : " + s.getSize + "byte")
+		strList.toList
+		//summaryList.foreach(s => Logger.info(s.getKey + " : " + s.getSize + "byte"))
 	}
 }
