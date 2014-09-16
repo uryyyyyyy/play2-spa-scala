@@ -9,13 +9,13 @@ import play.api.Play.current
 object CsvController extends Controller {
 
 	def importCsv = Action(parse.multipartFormData) { request =>
-		CsvService.importScv(request.body.file("file"))
+		DB.withSession(CsvService.importCsv(request.body.file("file"), _))
 		Ok("ok")
 	}
 
 	def exportCsv(fileName: String) = Action { request =>
 		SessionService.isGetAuthorized(request)
-		val file = DB.withTransaction(CsvService.exportScv(_, fileName))
+		val file = DB.withTransaction(CsvService.exportCsv(_, fileName))
 		Ok.sendFile(
 			content = file,
 			fileName = _ => fileName

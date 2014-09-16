@@ -1,20 +1,33 @@
 package util
 
+import java.io.{PrintWriter, InputStreamReader, FileInputStream, File}
+
+import au.com.bytecode.opencsv.{CSVWriter, CSVReader}
 import models.CustomerDTO
+import play.api.Logger
 
 object CsvUtil {
-
-	def csvToObject(line: String): CustomerDTO = {
-		val list = line split ','
-		CustomerDTO(list(1).toInt, list(2))
+	def csvToObject(file: File, charCode: String):Iterator[CustomerDTO] = {
+		val input = new FileInputStream(file)
+		val reader = new CSVReader(new InputStreamReader(input, charCode))
+		Iterator.continually(reader.readNext).takeWhile(_ != null).drop(1).map {
+			line => csvToObject(line)
+		}
 	}
 
-	def objectToCsv(obj: CustomerDTO): String = {
-		obj.id + "," + obj.name + "\n"
+	def objectToCsv(list: List[CustomerDTO], file:File, charCode: String): File = {
+		val writer = new CSVWriter(new PrintWriter(file, charCode))
+		list.map(objectToCsv).foreach(writer.writeNext)
+		writer.flush()
+		file
 	}
 
-	// 前後のダブルクォーテーションを除去
-	def dropQuote(str : String) : String = {
-		str drop 1 dropRight 1
+	private def csvToObject(line: Array[String]): CustomerDTO = {
+		Logger.info(line(0) + " " +  line(6))
+		CustomerDTO(line(0).toInt, line(6))
+	}
+
+	private def objectToCsv(dto : CustomerDTO):Array[String] = {
+		Array(dto.id.toString, dto.name)
 	}
 }
