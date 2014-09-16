@@ -1,18 +1,22 @@
 package controllers
 
+import di.Production._
 import play.api.mvc.{Action, Controller}
 import services.{FileService, SessionService}
-import di.Production._
+import util.PlayFileUploadUtil
 
 object FileController extends Controller {
 
-	def upload = Action(parse.multipartFormData) { request =>
-		val str = FileService.uploadToS3(request.body.file("file"))
-		Ok(str)
+	def upload = Action { request =>
+		SessionService.checkAuthorized(request)
+		PlayFileUploadUtil.checkFileExist(request) match {
+			case None => BadRequest("upload file not found")
+			case Some(file) => Ok(FileService.uploadToS3(file))
+		}
 	}
 
 	def download(fileName: String) = Action { request =>
-		SessionService.isGetAuthorized(request)
+		SessionService.checkAuthorized(request)
 		val file = FileService.downloadFromS3(fileName)
 		Ok.sendFile(
 			content = file,
@@ -21,7 +25,7 @@ object FileController extends Controller {
 	}
 
 	def list = Action { request =>
-		SessionService.isGetAuthorized(request)
+		SessionService.checkAuthorized(request)
 		FileService.list
 		Ok("OK")
 	}
