@@ -38,7 +38,20 @@
 
         fileDownload : function (fileName) {
 			util.getAjaxAsync('jsonApi/download/' + fileName);
-		}
+		},
 
+		csvImport : function (fd) {
+            var postData = {
+                type : 'POST',
+                dataType : 'text',
+                data : fd,
+                processData : false, //specification (not allow jQuery to exec data)
+                contentType : false //specification
+            };
+
+            $.ajax( 'jsonApi/csv/import', postData ).done(function(text){
+                console.log(text);
+            });
+        }
     };
 })(jQuery);

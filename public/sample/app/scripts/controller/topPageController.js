@@ -6,6 +6,7 @@ simpleWebDevTool.controller.topPageController = function(){
     var miniForm = component.sampleForm('#form');
     var uploadBtn = component.sampleButton('#upload_btn');
     var downloadBtn = component.sampleButton('#download_btn');
+    var csvImportBtn = component.sampleButton('#csv_import_btn');
 
     miniForm.keyUpEStream.assign(function(e) {
         console.log('miniForm.keyUpEStream');
@@ -16,9 +17,9 @@ simpleWebDevTool.controller.topPageController = function(){
 
     uploadBtn.clickEStream.assign(function() {
         if ( $('#file').val() !== '' ) {
-          var fd = new FormData();
-          fd.append( 'file', $('#file').prop('files')[0] );
-          service.fileUpload(fd);
+            var fd = new FormData();
+            fd.append( 'file', $('#file').prop('files')[0] );
+            service.fileUpload(fd);
         }
     });
 
@@ -27,6 +28,14 @@ simpleWebDevTool.controller.topPageController = function(){
 		//service.fileDownload($('#file').prop('files')[0].name);
 		location.assign('jsonApi/download/' + $('#file').prop('files')[0].name);
 	});
+
+	csvImportBtn.clickEStream.assign(function() {
+        if ( $('#file').val() !== '' ) {
+            var fd = new FormData();
+            fd.append( 'file', $('#file').prop('files')[0] );
+            service.csvImport(fd);
+        }
+    });
 
     var _refresh = function(refreshData) {
         console.log('refresh');
