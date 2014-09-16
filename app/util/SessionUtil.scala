@@ -13,7 +13,5 @@ trait SessionUtil {
 
 	def getSessionFromCache(sessionId: String): SessionDTO
 
-	def isPostAuthorized[A](request: Request[AnyContent])(implicit sessionUtil: SessionUtil): SessionDTO
-
-	def isGetAuthorized(request: Request[AnyContent])(implicit sessionUtil: SessionUtil): SessionDTO
+	def checkAuthorized(request: Request[AnyContent])(implicit sessionUtil: SessionUtil): SessionDTO
 }

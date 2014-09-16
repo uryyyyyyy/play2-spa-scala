@@ -1,24 +1,26 @@
 package controllers
 
-import play.api.db.slick._
+import di.Production._
 import play.api.mvc.{Action, Controller}
 import services.{CsvService, SessionService}
-import di.Production._
-import play.api.Play.current
+import util.PlayFileUploadUtil
 
 object CsvController extends Controller {
 
-	def importCsv = Action(parse.multipartFormData) { request =>
-		DB.withSession(CsvService.importCsv(request.body.file("file"), _))
-		Ok("ok")
+	def importCsv = Action { request =>
+		SessionService.checkAuthorized(request)
+		PlayFileUploadUtil.checkFileExist(request) match {
+			case None => BadRequest("upload file not found")
+			case Some(file) => Ok(CsvService.importCsv(file))
+		}
 	}
 
-	def exportCsv(fileName: String) = Action { request =>
-		SessionService.isGetAuthorized(request)
-		val file = DB.withTransaction(CsvService.exportCsv(_, fileName))
+	def exportCsv(searchName: String) = Action { request =>
+		SessionService.checkAuthorized(request)
+		val file = CsvService.exportCsv(searchName)
 		Ok.sendFile(
 			content = file,
-			fileName = _ => fileName
+			fileName = _ => "sample.csv"
 		)
 	}
 }

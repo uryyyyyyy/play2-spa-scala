@@ -8,11 +8,8 @@ import java.io.File
 
 object FileService {
 
-	def uploadToS3(file: Option[FilePart[TemporaryFile]])(implicit s3Uploader: S3Util): String = {
-		file match {
-			case None => "miss"
-			case Some(s) => s3Uploader.post(s)
-		}
+	def uploadToS3(file: FilePart[TemporaryFile])(implicit s3Uploader: S3Util): String = {
+		s3Uploader.post(file)
 	}
 
 	def downloadFromS3(fileName: String)(implicit s3Uploader: S3Util): File = {
