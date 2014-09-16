@@ -1,11 +1,12 @@
 package services
 
+import java.io.File
+
 import daos.CustomerDao
 import play.api.db.slick._
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc.MultipartFormData.FilePart
 import util.{HashUtil, CsvUtil}
-import java.io._
 
 object CsvService {
 
