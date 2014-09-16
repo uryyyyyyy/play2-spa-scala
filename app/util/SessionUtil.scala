@@ -2,7 +2,7 @@ package util
 
 import daos.UserDao
 import models.{User, SessionDTO}
-import play.api.db.slick._
+import play.api.db.slick.Session
 import play.api.mvc.{AnyContent, Request, Headers}
 
 trait SessionUtil {
