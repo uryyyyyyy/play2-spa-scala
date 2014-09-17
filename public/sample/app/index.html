@@ -8,10 +8,13 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="bower_components/slickgrid/slick.grid.css"/>
+	<link rel="stylesheet" href="bower_components/slickgrid/controls/slick.pager.css"/>
     <!-- endbower -->
 
     <!-- build:css styles.min.css -->
     <link rel="stylesheet" href="styles/main.css">
+	<link rel="stylesheet" href="styles/slickGrid.css">
     <!-- endbuild -->
     <!-- other CSS -->
     <!-- other end -->
@@ -25,6 +28,7 @@
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#/top">top</a></li>
 	        <li><a href="#/config">config</a></li>
+	        <li><a href="#/list">list</a></li>
         </ul>
         <h3 class="text-muted"><i class="icon-camera-retro icon-large brown"></i><span class="glyphicon glyphicon-tower"
                                                                                        style="color: red;"></span>simpleWebDevTool
@@ -46,9 +50,16 @@
 
 <!-- bower:js -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/jquery-ui/jquery-ui.js"></script>
+<script src="bower_components/jquery.event.drag-drop/event.drag/jquery.event.drag.js"></script>
 <script src="bower_components/lodash/dist/lodash.min.js"></script>
 <script src="bower_components/bacon/dist/Bacon.min.js"></script>
 <script src="bower_components/sammy/lib/min/sammy-0.7.6.min.js"></script>
+<script src="bower_components/slickgrid/slick.core.js"></script>
+<script src="bower_components/slickgrid/slick.formatters.js"></script>
+<script src="bower_components/slickgrid/slick.grid.js"></script>
+<script src="bower_components/slickgrid/slick.dataview.js"></script>
+<script src="bower_components/slickgrid/controls/slick.pager.js"></script>
 <!-- endbower -->
 
 <!-- other library -->
@@ -59,16 +70,20 @@
 <script src="scripts/appRoute.js"></script>
 <script src="scripts/controller/topPageController.js"></script>
 <script src="scripts/controller/configController.js"></script>
+<script src="scripts/controller/listController.js"></script>
 <script src="scripts/service/topPageService.js"></script>
 <script src="scripts/service/configService.js"></script>
+<script src="scripts/service/listService.js"></script>
 <script src="scripts/dao/topPageDao.js"></script>
 <script src="scripts/dao/configDao.js"></script>
+<script src="scripts/dao/formStrDao.js"></script>
 <script src="scripts/util/ajaxUtil.js"></script>
 <script src="scripts/util/render.js"></script>
 <script src="scripts/util/timer.js"></script>
 <script src="scripts/component/sampleForm.js"></script>
 <script src="scripts/component/form.js"></script>
 <script src="scripts/component/sampleButton.js"></script>
+<script src="scripts/component/slickGridList.js"></script>
 <!-- endbuild -->
 </body>
 </html>

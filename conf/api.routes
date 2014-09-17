@@ -13,3 +13,5 @@ GET    /files/list                                             controllers.FileC
 
 GET    /csv/export/:searchName                                             controllers.CsvController.exportCsv(searchName: String)
 POST    /csv/import                                             controllers.CsvController.importCsv
+
+GET    /listSample/all                                             controllers.SampleController.getAllList
