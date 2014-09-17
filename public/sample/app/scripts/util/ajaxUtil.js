@@ -25,9 +25,10 @@ simpleWebDevTool.util.okFunc = function(okCallBack) {
     'use strict';
     return function(res){
         console.log('okDialog');
+        console.log(res)
         $('#alert').html("<div class='alert alert-success alert-dismissible' role='alert'>" +
               "<button type='button' class='close' data-dismiss='alert'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>" +
-              "post success" + "</div>");
+              "success" + "</div>");
         okCallBack(res);
     };
 };

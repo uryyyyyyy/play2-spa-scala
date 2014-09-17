@@ -1,9 +1,9 @@
 package services
 
-import daos.{FormSampleDao, CustomerDao}
+import daos.{CustomerDao, FormSampleDao}
 import models.{CustomerDTO, FormSampleDTO}
-import play.api.db.slick._
 import play.api.Play.current
+import play.api.db.slick._
 
 object SampleService {
 
@@ -25,8 +25,12 @@ object SampleService {
 		dao.searchByID(id, session).get
 	}
 
-	def miniLogic: FormSampleDTO = DB.withTransaction{s =>
+	def miniLogic: FormSampleDTO = DB.withTransaction { s:Session =>
 		FormSampleDTO(1, "success")
+	}
+
+	def getAllLine(implicit dao: FormSampleDao): List[FormSampleDTO] = DB.withTransaction { s:Session =>
+		dao.getByStr("", s)
 	}
 
 }

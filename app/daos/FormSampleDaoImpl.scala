@@ -1,8 +1,9 @@
 package daos
 
-import models.FormSampleDTO
-import play.api.db.slick.Config.driver.simple._
 import entities.{FormSampleEntity, FormSampleTable}
+import models.FormSampleDTO
+import play.api.db.slick
+import play.api.db.slick.Config.driver.simple._
 
 object FormSampleDaoImpl extends FormSampleDao {
 	lazy val query = FormSampleTable.query
@@ -23,5 +24,10 @@ object FormSampleDaoImpl extends FormSampleDao {
 
 	override def update(form: FormSampleDTO, s: Session) = {
 		query.filter(_.id === form.id).update(FormSampleEntity(form.id, form.formStr))(s)
+	}
+
+	override def getByStr(str: String, s: slick.Session): List[FormSampleDTO] = {
+		val list = query.filter(row => row.formStr like "%" + str + "%").list(s)
+		list.map(entity => FormSampleDTO(entity.id, entity.formStr))
 	}
 }

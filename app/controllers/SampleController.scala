@@ -29,4 +29,10 @@ object SampleController extends Controller {
 		val c = SampleService.logic2(id)
 		Ok(Json.toJson(c))
 	}
+
+	def getAllList = Action { request =>
+		SessionService.checkAuthorized(request)
+		val c = SampleService.getAllLine
+		Ok(Json.toJson(c))
+	}
 }
